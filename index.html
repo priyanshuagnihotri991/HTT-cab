@@ -1,33 +1,157 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08172f"><link rel="manifest" href="manifest.json"><title>HTT CAB</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08172f">
+<title>HTT CAB | Book Your Ride</title>
 <style>
-:root{--n:#08172f;--g:#d7b56d}*{box-sizing:border-box}body{margin:0;background:#f7f5ef;color:#172033;font-family:Arial,sans-serif}header{background:linear-gradient(135deg,#08172f,#10284a);color:white;padding:25px 18px;border-bottom:4px solid var(--g)}.brand{color:var(--g);letter-spacing:3px;font-size:12px;font-weight:bold}.logo{font-size:32px;font-weight:800;margin:8px 0}.tag{font-size:14px}nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}nav a{color:white;text-decoration:none;border:1px solid #ffffff55;padding:8px 12px;border-radius:20px;font-size:12px}main{max-width:720px;margin:auto;padding:16px}.card{background:white;padding:18px;border-radius:16px;margin:14px 0;box-shadow:0 5px 20px #0000000d}h2{color:var(--n);margin:0 0 12px}label{display:block;font-size:13px;font-weight:bold;margin:12px 0 6px}input,select{width:100%;padding:13px;border:1px solid #d9deea;border-radius:9px;font-size:15px;background:white}.grid,.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{background:#f4f1e8;padding:13px;border-radius:10px;color:var(--n);font-weight:bold}.tile span{display:block;font-size:12px;font-weight:normal;color:#657086;margin-top:5px}.btn{display:block;width:100%;padding:15px;border:0;border-radius:10px;background:var(--g);color:#111;font-weight:bold;font-size:15px;margin-top:16px;text-align:center;text-decoration:none;cursor:pointer}.dark{background:var(--n);color:white}.muted{font-size:12px;color:#657086;line-height:1.5}#status{font-size:14px;line-height:1.5;margin-top:12px}footer{text-align:center;padding:20px;color:#657086;font-size:12px}@media(max-width:520px){.grid,.tiles{grid-template-columns:1fr}}
-</style></head><body>
-<header><div class="brand">HIMANSHU TOUR &amp; TRAVELS</div><div class="logo">HTT CAB</div><div class="tag">Your Journey, Our Responsibility.</div><nav><a href="#book">Book a Cab</a><a href="#fleet">Our Fleet</a><a href="#contact">Contact</a></nav></header>
-<main><section class="card" id="book"><h2>Book Your Ride</h2><form id="booking">
-<label>Pickup Location</label><input id="pickup" required maxlength="150" placeholder="e.g. Vrindavan Railway Station">
-<label>Drop Location</label><input id="drop" required maxlength="150" placeholder="Destination">
-<div class="grid"><div><label>Trip Type</label><select id="trip"><option>One Way</option><option>Round Trip</option><option>Local Sightseeing</option></select></div><div><label>Vehicle</label><select id="vehicle"><option>Sedan</option><option>SUV / Ertiga</option><option>Innova / Crysta</option><option>Tempo Traveller</option><option>Luxury Car</option><option>Other</option></select></div></div>
-<div class="grid"><div><label>Travel Date</label><input id="date" type="date" required></div><div><label>Passengers</label><input id="passengers" type="number" min="1" max="30" value="2" required></div></div>
-<label>Your Name</label><input id="name" required maxlength="80"><label>Mobile Number</label><input id="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit mobile number">
-<button class="btn" id="submitBtn" type="submit">Submit Booking Request</button><p id="status" role="status" aria-live="polite"></p><p class="muted">Your ride is confirmed only after our team contacts you. After saving, you can also send the request on WhatsApp.</p></form></section>
-<section class="card" id="fleet"><h2>Our Fleet</h2><div class="tiles"><div class="tile">Sedan<span>Comfortable city and outstation rides</span></div><div class="tile">SUV / Ertiga<span>Family travel</span></div><div class="tile">Innova / Crysta<span>Premium family journeys</span></div><div class="tile">Tempo Traveller<span>Group and pilgrimage trips</span></div><div class="tile">Luxury Cars<span>Special occasions</span></div><div class="tile">Custom Booking<span>Ask for other vehicle options</span></div></div></section>
-<section class="card" id="contact"><h2>Contact HTT CAB</h2><p><b>Phone / WhatsApp:</b> 7895997134</p><p><b>Office:</b> Chaitanya Vihar Phase-2, Vrindavan, Uttar Pradesh, India</p><a class="btn dark" href="https://wa.me/917895997134" target="_blank" rel="noopener">Chat on WhatsApp</a></section></main>
+:root{--navy:#08172f;--gold:#d7b56d;--ink:#172033;--muted:#667085;--line:#e5e7eb}
+*{box-sizing:border-box}body{margin:0;background:#f5f6f8;color:var(--ink);font:16px/1.5 Arial,sans-serif}
+header{background:linear-gradient(135deg,#061329,#12294b);color:white;padding:26px 18px;text-align:center;border-bottom:4px solid var(--gold)}
+.brand{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:bold}.logo{font-size:30px;font-weight:800;margin:5px 0}.tag{color:#e7eaf0}
+main{max-width:760px;margin:22px auto;padding:0 14px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 5px 20px #1020400c}
+h2{margin:0 0 14px;color:var(--navy);font-size:21px}.hint{color:var(--muted);font-size:13px;margin-top:-8px}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #cfd5df;border-radius:9px;font:inherit;background:white}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:700;font-size:15px;cursor:pointer}
+.primary{background:var(--gold);color:#1b2433;width:100%;margin-top:16px}.secondary{background:#edf1f6;color:var(--navy);width:100%;margin-top:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row button{flex:1}
+.status{font-size:14px;margin-top:12px;white-space:pre-wrap}.ok{color:#087443}.err{color:#b42318}
+.hidden{display:none!important}.booking-item{padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:13px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.card{padding:16px}.logo{font-size:26px}}
+</style>
+</head>
+<body>
+<header><div class="brand">HIMANSHU TOUR &amp; TRAVELS</div><div class="logo">HTT CAB</div><div class="tag">Your Journey, Our Responsibility.</div></header>
+<main>
+<section class="card" id="accountCard">
+<h2>Customer Login / Sign Up</h2>
+<p class="hint">Create an account or log in to book and view your rides.</p>
+<label for="email">Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="At least 6 characters">
+<div class="row"><button class="primary" id="signupBtn">Create Account</button><button class="secondary" id="loginBtn">Login</button></div>
+<button class="secondary hidden" id="logoutBtn">Logout</button>
+<div id="authStatus" class="status" aria-live="polite"></div>
+</section>
+
+<section class="card hidden" id="bookingCard">
+<h2>Book Your Ride</h2>
+<p class="hint">Enter your trip details. Your request will be saved securely.</p>
+<form id="bookingForm">
+<label for="customerName">Full name</label><input id="customerName" maxlength="80" required>
+<div class="grid">
+<div><label for="phone">Mobile number</label><input id="phone" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit number" required></div>
+<div><label for="travelDate">Travel date</label><input id="travelDate" type="date" required></div>
+</div>
+<label for="pickup">Pickup location</label><input id="pickup" maxlength="150" required>
+<label for="drop">Drop location</label><input id="drop" maxlength="150" required>
+<div class="grid">
+<div><label for="tripType">Trip type</label><select id="tripType" required><option value="One Way">One Way</option><option value="Round Trip">Round Trip</option><option value="Local">Local</option></select></div>
+<div><label for="vehicleType">Vehicle type</label><select id="vehicleType" required><option value="Sedan">Sedan</option><option value="SUV">SUV</option><option value="Ertiga">Ertiga</option><option value="Tempo Traveller">Tempo Traveller</option><option value="Other">Other</option></select></div>
+</div>
+<label for="passengers">Passengers</label><input id="passengers" type="number" min="1" max="30" value="2" required>
+<button class="primary" type="submit" id="bookBtn">Submit Booking Request</button>
+<div id="bookingStatus" class="status" aria-live="polite"></div>
+</form>
+</section>
+
+<section class="card hidden" id="adminCard">
+<h2>Admin — Booking Requests</h2>
+<p class="hint">Owner access is restricted to the configured Admin UID.</p>
+<button class="secondary" id="refreshAdmin">Refresh bookings</button>
+<div id="adminStatus" class="status"></div>
+<div id="bookingList"></div>
+</section>
+
+<section class="card">
+<h2>Contact HTT CAB</h2>
+<p><b>Phone / WhatsApp:</b> 7895997134</p>
+<p><b>Office:</b> Chaitanya Vihar Phase-2, Vrindavan, Uttar Pradesh</p>
+</section>
+</main>
 <footer>© <span id="year"></span> HTT CAB · Himanshu Tour &amp; Travels</footer>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",authDomain:"htt-cab.firebaseapp.com",projectId:"htt-cab",storageBucket:"htt-cab.firebasestorage.app",messagingSenderId:"752311448265",appId:"1:752311448265:web:33738207544f66846e5318"};
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-document.getElementById("year").textContent=new Date().getFullYear();
-const form=document.getElementById("booking"),btn=document.getElementById("submitBtn"),statusBox=document.getElementById("status");
-const val=id=>document.getElementById(id).value.trim();
-form.addEventListener("submit",async e=>{e.preventDefault();statusBox.textContent="";btn.disabled=true;btn.textContent="Submitting...";
-try{const user=(await signInAnonymously(auth)).user;const data={customerName:val("name"),phone:val("phone"),pickup:val("pickup"),drop:val("drop"),tripType:val("trip"),vehicleType:val("vehicle"),travelDate:val("date"),passengers:Number(val("passengers")),status:"Pending",userId:user.uid,createdAt:serverTimestamp()};
-const ref=await addDoc(collection(db,"bookings"),data);statusBox.textContent="Booking saved! Reference: "+ref.id+". Opening WhatsApp...";
-const msg=["Hello HTT CAB, I submitted a booking request.","Booking ID: "+ref.id,"Name: "+data.customerName,"Mobile: "+data.phone,"Pickup: "+data.pickup,"Drop: "+data.drop,"Trip Type: "+data.tripType,"Vehicle: "+data.vehicleType,"Travel Date: "+data.travelDate,"Passengers: "+data.passengers].join("\n");
-window.open("https://wa.me/917895997134?text="+encodeURIComponent(msg),"_blank","noopener");form.reset();document.getElementById("passengers").value="2";
-}catch(err){console.error(err);statusBox.textContent="Could not save booking: "+(err.code||err.message)+". Please contact us on WhatsApp."}finally{btn.disabled=false;btn.textContent="Submit Booking Request"}});
-if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-</script></body></html>
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",
+  authDomain: "htt-cab.firebaseapp.com",
+  projectId: "htt-cab",
+  storageBucket: "htt-cab.firebasestorage.app",
+  messagingSenderId: "752311448265",
+  appId: "1:752311448265:web:33738207544f66846e5318"
+};
+const ADMIN_UID = "M7XdLUWMIHgeB7VVv07HvugAADA2";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+$("year").textContent = new Date().getFullYear();
+
+function showStatus(id, message, good=false){ const el=$(id); el.textContent=message; el.className="status "+(good?"ok":"err"); }
+$("signupBtn").addEventListener("click", async () => {
+  const email=$("email").value.trim(), password=$("password").value;
+  try { await createUserWithEmailAndPassword(auth,email,password); showStatus("authStatus","Account created successfully.",true); }
+  catch(e){ showStatus("authStatus",e.message); }
+});
+$("loginBtn").addEventListener("click", async () => {
+  const email=$("email").value.trim(), password=$("password").value;
+  try { await signInWithEmailAndPassword(auth,email,password); showStatus("authStatus","Login successful.",true); }
+  catch(e){ showStatus("authStatus",e.message); }
+});
+$("logoutBtn").addEventListener("click", async()=>{await signOut(auth);});
+onAuthStateChanged(auth, user=>{
+  $("bookingCard").classList.toggle("hidden",!user);
+  $("logoutBtn").classList.toggle("hidden",!user);
+  $("signupBtn").classList.toggle("hidden",!!user);
+  $("loginBtn").classList.toggle("hidden",!!user);
+  $("adminCard").classList.toggle("hidden",!(user && user.uid===ADMIN_UID));
+  if(user){ showStatus("authStatus","Logged in: "+user.email,true); }
+  else { showStatus("authStatus","Please log in or create an account."); $("bookingList").innerHTML=""; }
+});
+$("bookingForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const user=auth.currentUser;
+  if(!user){showStatus("bookingStatus","Please log in first.");return;}
+  const phone=$("phone").value.trim();
+  if(!/^[0-9]{10}$/.test(phone)){showStatus("bookingStatus","Enter a valid 10-digit mobile number.");return;}
+  const passengers=Number($("passengers").value);
+  if(!Number.isInteger(passengers)||passengers<1||passengers>30){showStatus("bookingStatus","Passengers must be between 1 and 30.");return;}
+  $("bookBtn").disabled=true;
+  try{
+    await addDoc(collection(db,"bookings"),{
+      customerName:$("customerName").value.trim(), phone,
+      pickup:$("pickup").value.trim(), drop:$("drop").value.trim(),
+      tripType:$("tripType").value, vehicleType:$("vehicleType").value,
+      travelDate:$("travelDate").value, passengers,
+      status:"Pending", userId:user.uid, createdAt:serverTimestamp()
+    });
+    showStatus("bookingStatus","Booking request saved successfully! HTT CAB will contact you.",true);
+    $("bookingForm").reset();
+    $("passengers").value="2";
+  }catch(err){showStatus("bookingStatus","Could not save booking: "+err.message);}
+  finally{$("bookBtn").disabled=false;}
+});
+async function loadAdmin(){
+  if(!auth.currentUser||auth.currentUser.uid!==ADMIN_UID){showStatus("adminStatus","Admin access only.");return;}
+  $("bookingList").innerHTML="";
+  try{
+    const snap=await getDocs(query(collection(db,"bookings"),orderBy("createdAt","desc")));
+    if(snap.empty){$("bookingList").textContent="No bookings yet.";return;}
+    snap.forEach(doc=>{
+      const b=doc.data(), div=document.createElement("div"); div.className="booking-item";
+      div.textContent=`${b.customerName||""} · ${b.phone||""} | ${b.pickup||""} → ${b.drop||""} | ${b.vehicleType||""} | ${b.travelDate||""} | ${b.status||""}`;
+      $("bookingList").appendChild(div);
+    });
+    showStatus("adminStatus",`Showing ${snap.size} booking(s).`,true);
+  }catch(e){showStatus("adminStatus","Could not load bookings: "+e.message);}
+}
+$("refreshAdmin").addEventListener("click",loadAdmin);
+</script>
+</body>
+</html>
