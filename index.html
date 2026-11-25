@@ -3,58 +3,99 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#08172f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#08172f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>HTT CAB | Book Your Ride</title>
 <style>
 :root{--navy:#07172f;--navy2:#10294b;--gold:#d8b66d;--ink:#172033;--muted:#667085;--line:#e7eaf0;--paper:#f4f6fa}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,Arial,sans-serif}
 header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:22px 18px 26px;border-bottom:4px solid var(--gold)}
 .topbar{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:800}.logo{font-size:30px;font-weight:900;letter-spacing:1px;margin:2px 0}.tag{color:#e7eaf0;font-size:13px}
+.brand{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:800}
+.logo{font-size:30px;font-weight:900;letter-spacing:1px;margin:2px 0}
+.tag{color:#e7eaf0;font-size:13px}
 .pill{border:1px solid #d8b66d88;border-radius:30px;padding:7px 12px;color:var(--gold);font-size:12px;white-space:nowrap}
-.hero{max-width:900px;margin:18px auto 0;padding:0 14px}.hero h1{font-size:25px;line-height:1.2;margin:0 0 6px}.hero p{margin:0;color:#d9e1ed;font-size:13px}
-main{max-width:900px;margin:18px auto;padding:0 14px}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 8px 26px #1020400c}
-h2{margin:0 0 10px;color:var(--navy);font-size:20px}.hint{color:var(--muted);font-size:13px;margin:0 0 12px}
-label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}input,select{width:100%;padding:13px;border:1px solid #cfd5df;border-radius:11px;font:inherit;background:white;min-height:46px}
+.hero{max-width:900px;margin:18px auto 0;padding:0 14px}
+.hero h1{font-size:25px;line-height:1.2;margin:0 0 6px}
+.hero p{margin:0;color:#d9e1ed;font-size:13px}
+main{max-width:900px;margin:18px auto;padding:0 14px}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 8px 26px #1020400c}
+h2{margin:0 0 10px;color:var(--navy);font-size:20px}
+.hint{color:var(--muted);font-size:13px;margin:0 0 12px}
+label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}
+input,select{width:100%;padding:13px;border:1px solid #cfd5df;border-radius:11px;font:inherit;background:white;min-height:46px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
 button{border:0;border-radius:11px;padding:13px 16px;font-weight:800;font-size:14px;cursor:pointer}
-.primary{background:linear-gradient(135deg,#e5c982,var(--gold));color:#172033;width:100%;margin-top:15px}.secondary{background:#edf1f6;color:var(--navy);width:100%;margin-top:8px}
-.row{display:flex;gap:10px;flex-wrap:wrap}.row button{flex:1}
-.status{font-size:13px;margin-top:12px;white-space:pre-wrap}.ok{color:#087443}.err{color:#b42318}
-.hidden{display:none!important}.booking-item{padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.primary{background:linear-gradient(135deg,#e5c982,var(--gold));color:#172033;width:100%;margin-top:15px}
+.secondary{background:#edf1f6;color:var(--navy);width:100%;margin-top:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row button{flex:1}
+.status{font-size:13px;margin-top:12px;white-space:pre-wrap}
+.ok{color:#087443}.err{color:#b42318}
+.hidden{display:none!important}
+.booking-item{padding:12px 0;border-top:1px solid var(--line);font-size:14px}
 .trip-types{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
-.trip-chip{background:#f4f6fa;border:1px solid #e3e7ef;border-radius:12px;padding:11px 5px;text-align:center;font-size:12px;font-weight:800;color:var(--navy)}
+.trip-chip{background:#f4f6fa;border:1px solid #e3e7ef;border-radius:12px;padding:11px 5px;text-align:center;font-size:12px;font-weight:800;color:var(--navy);cursor:pointer}
 .trip-chip.active{background:#fff8e8;border-color:var(--gold);color:#75551a}
 .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
 .feature{background:#f7f8fb;border:1px solid var(--line);border-radius:13px;padding:12px;text-align:center;font-size:12px;font-weight:700;color:var(--navy)}
 .feature span{display:block;font-size:20px;margin-bottom:4px}
 footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
-@media(max-width:560px){.grid{grid-template-columns:1fr}.card{padding:16px}.logo{font-size:26px}.trip-types{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:22px}}
+@media(max-width:560px){
+.grid{grid-template-columns:1fr}
+.card{padding:16px}
+.logo{font-size:26px}
+.trip-types{grid-template-columns:repeat(2,1fr)}
+.hero h1{font-size:22px}
+}
 </style>
 </head>
 <body>
 <header>
-<div class="topbar"><div><div class="brand">HIMANSHU TOUR &amp; TRAVELS</div><div class="logo">HTT CAB</div><div class="tag">Your Journey, Our Responsibility.</div></div><div class="pill">VRINDAVAN • MATHURA</div></div>
-<div class="hero"><h1>Your ride, your way.</h1><p>Comfortable journeys. Trusted travel. Book with HTT CAB.</p></div>
+<div class="topbar">
+<div>
+<div class="brand">HIMANSHU TOUR &amp; TRAVELS</div>
+<div class="logo">HTT CAB</div>
+<div class="tag">Your Journey, Our Responsibility.</div>
+</div>
+<div class="pill">VRINDAVAN • MATHURA</div>
+</div>
+<div class="hero">
+<h1>Your ride, your way.</h1>
+<p>Comfortable journeys. Trusted travel. Book with HTT CAB.</p>
+</div>
 </header>
 <main>
 <section class="card" id="homeIntro">
 <h2>Welcome to HTT CAB</h2>
 <p class="hint">Choose your journey and book a comfortable ride.</p>
-<div class="trip-types">
-<div class="trip-chip active">Local</div><div class="trip-chip">Outstation</div><div class="trip-chip">One Way</div><div class="trip-chip">Round Trip</div>
+<div class="trip-types" aria-label="Choose trip type">
+<button type="button" class="trip-chip active" data-trip="Local">Local</button>
+<button type="button" class="trip-chip" data-trip="Outstation">Outstation</button>
+<button type="button" class="trip-chip" data-trip="One Way">One Way</button>
+<button type="button" class="trip-chip" data-trip="Round Trip">Round Trip</button>
 </div>
 <div class="feature-grid">
-<div class="feature"><span>🚘</span>Multiple Cars</div><div class="feature"><span>📍</span>Pickup &amp; Drop</div><div class="feature"><span>🛡️</span>Verified Service</div>
+<div class="feature"><span>🚘</span>Multiple Cars</div>
+<div class="feature"><span>📍</span>Pickup &amp; Drop</div>
+<div class="feature"><span>🛡️</span>Verified Service</div>
 </div>
+<p class="hint" style="margin:12px 0 0">Choose a trip type above to start your booking.</p>
 </section>
 
 <section class="card" id="accountCard">
 <h2>Customer Login / Sign Up</h2>
 <p class="hint">Sign in or create your account to request a ride with HTT CAB.</p>
-<label for="email">Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
-<label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="At least 6 characters">
-<div class="row"><button class="primary" id="signupBtn">Create Account</button><button class="secondary" id="loginBtn">Login</button></div>
+<label for="email">Email address</label>
+<input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+<label for="password">Password</label>
+<input id="password" type="password" autocomplete="current-password" placeholder="At least 6 characters">
+<div class="row">
+<button class="primary" id="signupBtn">Create Account</button>
+<button class="secondary" id="loginBtn">Login</button>
+</div>
 <button class="secondary hidden" id="logoutBtn">Logout</button>
 <div id="authStatus" class="status" aria-live="polite"></div>
 </section>
@@ -63,18 +104,48 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
 <h2>Book Your Ride</h2>
 <p class="hint">Enter your pickup, destination and travel details. Your request will be saved securely.</p>
 <form id="bookingForm">
-<label for="customerName">Full name</label><input id="customerName" maxlength="80" required>
+<label for="customerName">Full name</label>
+<input id="customerName" maxlength="80" required>
 <div class="grid">
-<div><label for="phone">Mobile number</label><input id="phone" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit number" required></div>
-<div><label for="travelDate">Travel date</label><input id="travelDate" type="date" required></div>
+<div>
+<label for="phone">Mobile number</label>
+<input id="phone" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit number" required>
 </div>
-<label for="pickup">Pickup location</label><input id="pickup" maxlength="150" required>
-<label for="drop">Drop location</label><input id="drop" maxlength="150" required>
+<div>
+<label for="travelDate">Travel date</label>
+<input id="travelDate" type="date" required>
+</div>
+</div>
+<label for="pickup">Pickup location</label>
+<input id="pickup" maxlength="150" required>
+<label for="drop">Drop location</label>
+<input id="drop" maxlength="150" required>
 <div class="grid">
-<div><label for="tripType">Trip type</label><select id="tripType" required><option value="Local">Local</option><option value="Outstation">Outstation</option><option value="One Way">One Way</option><option value="Round Trip">Round Trip</option></select></div>
-<div><label for="vehicleType">Vehicle type</label><select id="vehicleType" required><option value="Sedan">Sedan</option><option value="SUV">SUV</option><option value="Ertiga">Ertiga</option><option value="Tempo Traveller">Tempo Traveller</option><option value="Other">Other</option></select></div>
+<div>
+<label for="tripType">Trip type</label>
+<select id="tripType" required>
+<option value="Local">Local</option>
+<option value="Outstation">Outstation</option>
+<option value="One Way">One Way</option>
+<option value="Round Trip">Round Trip</option>
+</select>
 </div>
-<label for="passengers">Passengers</label><input id="passengers" type="number" min="1" max="30" value="2" required>
+<div>
+<label for="vehicleType">Choose vehicle category</label>
+<select id="vehicleType" required>
+<option value="Hatchback">Hatchback</option>
+<option value="Sedan">Sedan</option>
+<option value="SUV">SUV</option>
+<option value="Ertiga">Ertiga</option>
+<option value="Innova">Innova</option>
+<option value="Tempo Traveller">Tempo Traveller</option>
+<option value="Luxury Cars">Luxury Cars</option>
+<option value="Custom Booking">Custom Booking</option>
+</select>
+</div>
+</div>
+<label for="passengers">Passengers</label>
+<input id="passengers" type="number" min="1" max="30" value="2" required>
 <button class="primary" type="submit" id="bookBtn">Submit Booking Request</button>
 <div id="bookingStatus" class="status" aria-live="polite"></div>
 </form>
@@ -102,77 +173,146 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",
-  authDomain: "htt-cab.firebaseapp.com",
-  projectId: "htt-cab",
-  storageBucket: "htt-cab.firebasestorage.app",
-  messagingSenderId: "752311448265",
-  appId: "1:752311448265:web:33738207544f66846e5318"
+apiKey: "AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",
+authDomain: "htt-cab.firebaseapp.com",
+projectId: "htt-cab",
+storageBucket: "htt-cab.firebasestorage.app",
+messagingSenderId: "752311448265",
+appId: "1:752311448265:web:33738207544f66846e5318"
 };
+
 const ADMIN_UID = "M7XdLUWMIHgeB7VVv07HvugAADA2";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const $ = id => document.getElementById(id);
+
 $("year").textContent = new Date().getFullYear();
 
-function showStatus(id, message, good=false){ const el=$(id); el.textContent=message; el.className="status "+(good?"ok":"err"); }
-$("signupBtn").addEventListener("click", async () => {
-  const email=$("email").value.trim(), password=$("password").value;
-  try { await createUserWithEmailAndPassword(auth,email,password); showStatus("authStatus","Account created successfully.",true); }
-  catch(e){ showStatus("authStatus",e.message); }
+document.querySelectorAll("[data-trip]").forEach(button=>{
+button.addEventListener("click",()=>{
+const trip=button.dataset.trip;
+$("tripType").value=trip;
+document.querySelectorAll("[data-trip]").forEach(item=>item.classList.toggle("active",item===button));
+$("bookingCard").scrollIntoView({behavior:"smooth",block:"start"});
 });
-$("loginBtn").addEventListener("click", async () => {
-  const email=$("email").value.trim(), password=$("password").value;
-  try { await signInWithEmailAndPassword(auth,email,password); showStatus("authStatus","Login successful.",true); }
-  catch(e){ showStatus("authStatus",e.message); }
 });
-$("logoutBtn").addEventListener("click", async()=>{await signOut(auth);});
-onAuthStateChanged(auth, user=>{
-  $("bookingCard").classList.toggle("hidden",!user);
-  $("logoutBtn").classList.toggle("hidden",!user);
-  $("signupBtn").classList.toggle("hidden",!!user);
-  $("loginBtn").classList.toggle("hidden",!!user);
-  $("adminCard").classList.toggle("hidden",!(user && user.uid===ADMIN_UID));
-  if(user){ showStatus("authStatus","Logged in: "+user.email,true); }
-  else { showStatus("authStatus","Please log in or create an account."); $("bookingList").innerHTML=""; }
+
+$("tripType").addEventListener("change",()=>{
+document.querySelectorAll("[data-trip]").forEach(item=>item.classList.toggle("active",item.dataset.trip===$("tripType").value));
 });
-$("bookingForm").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const user=auth.currentUser;
-  if(!user){showStatus("bookingStatus","Please log in first.");return;}
-  const phone=$("phone").value.trim();
-  if(!/^[0-9]{10}$/.test(phone)){showStatus("bookingStatus","Enter a valid 10-digit mobile number.");return;}
-  const passengers=Number($("passengers").value);
-  if(!Number.isInteger(passengers)||passengers<1||passengers>30){showStatus("bookingStatus","Passengers must be between 1 and 30.");return;}
-  $("bookBtn").disabled=true;
-  try{
-    await addDoc(collection(db,"bookings"),{
-      customerName:$("customerName").value.trim(), phone,
-      pickup:$("pickup").value.trim(), drop:$("drop").value.trim(),
-      tripType:$("tripType").value, vehicleType:$("vehicleType").value,
-      travelDate:$("travelDate").value, passengers,
-      status:"Pending", userId:user.uid, createdAt:serverTimestamp()
-    });
-    showStatus("bookingStatus","Booking request saved successfully! HTT CAB will contact you.",true);
-    $("bookingForm").reset();
-    $("passengers").value="2";
-  }catch(err){showStatus("bookingStatus","Could not save booking: "+err.message);}
-  finally{$("bookBtn").disabled=false;}
+
+function showStatus(id,message,good=false){
+const el=$(id);
+el.textContent=message;
+el.className="status "+(good?"ok":"err");
+}
+
+$("signupBtn").addEventListener("click",async()=>{
+const email=$("email").value.trim();
+const password=$("password").value;
+try{
+await createUserWithEmailAndPassword(auth,email,password);
+showStatus("authStatus","Account created successfully.",true);
+}catch(e){
+showStatus("authStatus",e.message);
+}
 });
+
+$("loginBtn").addEventListener("click",async()=>{
+const email=$("email").value.trim();
+const password=$("password").value;
+try{
+await signInWithEmailAndPassword(auth,email,password);
+showStatus("authStatus","Login successful.",true);
+}catch(e){
+showStatus("authStatus",e.message);
+}
+});
+
+$("logoutBtn").addEventListener("click",async()=>{
+await signOut(auth);
+});
+
+onAuthStateChanged(auth,user=>{
+$("bookingCard").classList.toggle("hidden",!user);
+$("logoutBtn").classList.toggle("hidden",!user);
+$("signupBtn").classList.toggle("hidden",!!user);
+$("loginBtn").classList.toggle("hidden",!!user);
+$("adminCard").classList.toggle("hidden",!(user&&user.uid===ADMIN_UID));
+if(user){
+showStatus("authStatus","Logged in: "+user.email,true);
+}else{
+showStatus("authStatus","Please log in or create an account.");
+$("bookingList").innerHTML="";
+}
+});
+
+$("bookingForm").addEventListener("submit",async e=>{
+e.preventDefault();
+const user=auth.currentUser;
+if(!user){
+showStatus("bookingStatus","Please log in first.");
+return;
+}
+const phone=$("phone").value.trim();
+if(!/^[0-9]{10}$/.test(phone)){
+showStatus("bookingStatus","Enter a valid 10-digit mobile number.");
+return;
+}
+const passengers=Number($("passengers").value);
+if(!Number.isInteger(passengers)||passengers<1||passengers>30){
+showStatus("bookingStatus","Passengers must be between 1 and 30.");
+return;
+}
+$("bookBtn").disabled=true;
+try{
+await addDoc(collection(db,"bookings"),{
+customerName:$("customerName").value.trim(),
+phone,
+pickup:$("pickup").value.trim(),
+drop:$("drop").value.trim(),
+tripType:$("tripType").value,
+vehicleType:$("vehicleType").value,
+travelDate:$("travelDate").value,
+passengers,
+status:"Pending",
+userId:user.uid,
+createdAt:serverTimestamp()
+});
+showStatus("bookingStatus","Booking request saved successfully! HTT CAB will contact you.",true);
+$("bookingForm").reset();
+$("passengers").value="2";
+}catch(err){
+showStatus("bookingStatus","Could not save booking: "+err.message);
+}finally{
+$("bookBtn").disabled=false;
+}
+});
+
 async function loadAdmin(){
-  if(!auth.currentUser||auth.currentUser.uid!==ADMIN_UID){showStatus("adminStatus","Admin access only.");return;}
-  $("bookingList").innerHTML="";
-  try{
-    const snap=await getDocs(query(collection(db,"bookings"),orderBy("createdAt","desc")));
-    if(snap.empty){$("bookingList").textContent="No bookings yet.";return;}
-    snap.forEach(doc=>{
-      const b=doc.data(), div=document.createElement("div"); div.className="booking-item";
-      div.textContent=`${b.customerName||""} · ${b.phone||""} | ${b.pickup||""} → ${b.drop||""} | ${b.vehicleType||""} | ${b.travelDate||""} | ${b.status||""}`;
-      $("bookingList").appendChild(div);
-    });
-    showStatus("adminStatus",`Showing ${snap.size} booking(s).`,true);
-  }catch(e){showStatus("adminStatus","Could not load bookings: "+e.message);}
+if(!auth.currentUser||auth.currentUser.uid!==ADMIN_UID){
+showStatus("adminStatus","Admin access only.");
+return;
+}
+$("bookingList").innerHTML="";
+try{
+const snap=await getDocs(query(collection(db,"bookings"),orderBy("createdAt","desc")));
+if(snap.empty){
+$("bookingList").textContent="No bookings yet.";
+return;
+}
+snap.forEach(doc=>{
+const b=doc.data();
+const div=document.createElement("div");
+div.className="booking-item";
+div.textContent=`${b.customerName||""} · ${b.phone||""} | ${b.pickup||""} → ${b.drop||""} | ${b.vehicleType||""} | ${b.travelDate||""} | ${b.status||""}`;
+$("bookingList").appendChild(div);
+});
+showStatus("adminStatus",`Showing ${snap.size} booking(s).`,true);
+}catch(e){
+showStatus("adminStatus","Could not load bookings: "+e.message);
+}
 }
 $("refreshAdmin").addEventListener("click",loadAdmin);
 </script>
