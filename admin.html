@@ -54,6 +54,13 @@ button:disabled{opacity:.5}
   <button id="refreshDriversBtn">Refresh Drivers</button>
   <div id="drivers" class="muted">No drivers loaded yet.</div>
  </div>
+ <div class="panel">
+  <h2>Driver Applications</h2>
+  <button id="refreshApplicationsBtn">Refresh Applications</button>
+  <div id="applicationsBox" class="muted">
+    No applications loaded yet.
+  </div>
+</div>
 </section>
 </main>
 
@@ -196,5 +203,73 @@ async function loadDrivers() {
 document.getElementById("refreshBtn").onclick = loadBookings;
 document.getElementById("refreshDriversBtn").onclick = loadDrivers;
 document.getElementById("logoutBtn").onclick = () => auth.signOut();
+ async function loadDriverApplications() {
+  const box = document.getElementById("applicationsBox");
+  box.textContent = "Loading applications...";
+
+  try {
+    const result = await db.collection("driverApplications")
+      .limit(50).get();
+
+    box.replaceChildren();
+
+    if (result.empty) {
+      box.textContent = "No driver applications found.";
+      return;
+    }
+
+    result.forEach(item => {
+      const data = item.data();
+      const card = document.createElement("div");
+      card.className = "booking";
+
+      const details = document.createElement("p");
+      details.textContent =
+        "Name: " + (data.fullName || data.name || "-") +
+        " | Phone: " + (data.Phone || data.phone || data.mobile || "-") +
+        " | City: " + (data.City || data.city || "-") +
+        " | Vehicle: " + (data.VehicleType || data.vehicleType || "-") +
+        " | Number: " + (data.VehicleNumber || data.vehicleNumber || "-") +
+        " | Status: " + (data.status || "Pending");
+
+      const select = document.createElement("select");
+
+      ["Pending", "Approved", "Rejected"].forEach(status => {
+        const option = document.createElement("option");
+        option.value = status;
+        option.textContent = status;
+        select.appendChild(option);
+      });
+
+      select.value = data.status || "Pending";
+
+      const saveBtn = document.createElement("button");
+      saveBtn.textContent = "Update Status";
+
+      saveBtn.onclick = async () => {
+        saveBtn.disabled = true;
+        try {
+          await db.collection("driverApplications")
+            .doc(item.id).update({ status: select.value });
+          alert("Application status updated!");
+        } catch (error) {
+          alert("Update failed: " + error.message);
+        }
+        saveBtn.disabled = false;
+      };
+
+      card.appendChild(details);
+      card.appendChild(select);
+      card.appendChild(saveBtn);
+      box.appendChild(card);
+    });
+
+  } catch (error) {
+    box.textContent = "Application error: " + error.message;
+  }
+}
+
+document.getElementById("refreshApplicationsBtn")
+  .onclick = loadDriverApplications;
 </script>
   
