@@ -156,15 +156,10 @@ const assignBtn = document.createElement("button");
     assignBtn.textContent = "Loading...";
 
     const driversResult = await getDocs(
-      query(
-        collection(db, "drivers"),
-        where("status", "==", "Approved"),
-        limit(50)
-      )
-    );
+  collection(db, "drivers")
+);
 
-    if (driversResult.empty) {
-      alert("No approved drivers available.");
+    alert("No drivers available.");
       return;
     }
 
