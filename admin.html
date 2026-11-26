@@ -96,7 +96,7 @@ document.getElementById("loginBtn").onclick = async () => {
    document.getElementById("password").value
   );
  } catch (error) {
-  message.textContent = "Login failed. Check your email and password.";
+message.textContent = "Login failed: " + error.code + " - " + error.message;
  }
 };
 
