@@ -68,6 +68,21 @@ button:disabled{opacity:.5}
     No vehicles loaded yet.
   </div>
 </div>
+ <div class="panel">
+  <h2>Customer Management</h2>
+  <button id="refreshCustomersBtn">Refresh Customers</button>
+  <div id="customersBox" class="muted">
+    No customers loaded yet.
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Payment Management</h2>
+  <button id="refreshPaymentsBtn">Refresh Payments</button>
+  <div id="paymentsBox" class="muted">
+    No payments loaded yet.
+  </div>
+</div>
 </section>
 </main>
 
@@ -363,5 +378,78 @@ async function loadVehicles() {
 }
 
 document.getElementById("refreshVehiclesBtn").onclick = loadVehicles;
+ const customersBox = document.getElementById("customersBox");
+const paymentsBox = document.getElementById("paymentsBox");
+
+async function loadCustomers() {
+  customersBox.textContent = "Loading customers...";
+
+  try {
+    const result = await db.collection("bookings").limit(100).get();
+    customersBox.replaceChildren();
+
+    const customers = new Map();
+
+    result.forEach(item => {
+      const data = item.data();
+      const id = data.userId || data.phone || data.mobile;
+
+      if (id && !customers.has(id)) {
+        customers.set(id, data);
+      }
+    });
+
+    if (customers.size === 0) {
+      customersBox.textContent = "No customer records found.";
+      return;
+    }
+
+    customers.forEach(data => {
+      const card = document.createElement("div");
+      card.className = "booking";
+      card.textContent =
+        "Name: " + (data.fullName || data.customerName || "-") +
+        " | Phone: " + (data.phone || data.mobile || "-") +
+        " | User ID: " + (data.userId || "-");
+
+      customersBox.appendChild(card);
+    });
+  } catch (error) {
+    customersBox.textContent = "Customer error: " + error.message;
+  }
+}
+
+async function loadPayments() {
+  paymentsBox.textContent = "Loading payments...";
+
+  try {
+    const result = await db.collection("bookings").limit(100).get();
+    paymentsBox.replaceChildren();
+
+    if (result.empty) {
+      paymentsBox.textContent = "No booking records found.";
+      return;
+    }
+
+    result.forEach(item => {
+      const data = item.data();
+      const card = document.createElement("div");
+      card.className = "booking";
+      card.textContent =
+        "Booking ID: " + item.id +
+        " | Customer: " + (data.fullName || data.customerName || "-") +
+        " | Fare: ₹" + (data.finalFare ?? data.fare ?? "Not available") +
+        " | Payment Status: " + (data.paymentStatus || "Not recorded") +
+        " | Method: " + (data.paymentMethod || "Not recorded");
+
+      paymentsBox.appendChild(card);
+    });
+  } catch (error) {
+    paymentsBox.textContent = "Payment error: " + error.message;
+  }
+}
+
+document.getElementById("refreshCustomersBtn").onclick = loadCustomers;
+document.getElementById("refreshPaymentsBtn").onclick = loadPayments;
 </script>
   
