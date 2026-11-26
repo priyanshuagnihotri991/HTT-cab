@@ -150,8 +150,73 @@ async function loadBookings() {
 const assignBtn = document.createElement("button");
    assignBtn.textContent = "Assign Driver";
    card.append(title, details, status, assignBtn);
-   assignBtn.onclick = () => {
-  alert("Driver assignment will be added next.");
+   assignBtn.onclick = async () => {
+  try {
+    assignBtn.disabled = true;
+    assignBtn.textContent = "Loading...";
+
+    const driversResult = await getDocs(
+      query(
+        collection(db, "drivers"),
+        where("status", "==", "Approved"),
+        limit(50)
+      )
+    );
+
+    if (driversResult.empty) {
+      alert("No approved drivers available.");
+      return;
+    }
+
+    const drivers = driversResult.docs;
+
+    const driverList = drivers.map((d, i) => {
+      const driver = d.data();
+      return (i + 1) + ". " +
+        (driver.fullName || "Unknown") +
+        " | " + (driver.phone || "No phone");
+    }).join("\n");
+
+    const choice = prompt(
+      "Select a Driver by entering number:\n\n" + driverList
+    );
+
+    if (choice === null) return;
+
+    const index = Number(choice) - 1;
+
+    if (!Number.isInteger(index) || index < 0 || index >= drivers.length) {
+      alert("Invalid driver selection.");
+      return;
+    }
+
+    const selectedDoc = drivers[index];
+    const selectedDriver = selectedDoc.data();
+
+    const confirmed = confirm(
+      "Assign " + selectedDriver.fullName +
+      " to this booking?"
+    );
+
+    if (!confirmed) return;
+
+    await updateDoc(doc(db, "bookings", item.id), {
+      assignedDriverId: selectedDoc.id,
+      assignedDriverName: selectedDriver.fullName,
+      assignedDriverPhone: selectedDriver.phone,
+      status: "Assigned",
+      assignedAt: serverTimestamp()
+    });
+
+    alert("Driver assigned successfully!");
+    await loadBookings();
+
+  } catch (error) {
+    alert("Assignment failed: " + error.message);
+  } finally {
+    assignBtn.disabled = false;
+    assignBtn.textContent = "Assign Driver";
+  }
 };
    bookingsBox.append(card);
   });
