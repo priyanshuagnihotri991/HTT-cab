@@ -131,10 +131,11 @@ async function loadBookings() {
       const card = document.createElement("div");
       card.className = "booking";
       card.textContent =
-        "Booking ID: " + item.id +
-        " | Name: " + (data.fullName || data.name || "-") +
-        " | Phone: " + (data.phone || data.mobile || "-") +
-        " | Status: " + (data.status || "-");
+  "Booking ID: " + item.id + "\n" +
+  Object.entries(data)
+    .map(([key, value]) => key + ": " +
+      (typeof value === "object" ? JSON.stringify(value) : value))
+    .join("\n");
       bookingsBox.appendChild(card);
     });
   } catch (error) {
