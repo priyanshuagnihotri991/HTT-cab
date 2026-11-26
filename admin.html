@@ -139,7 +139,27 @@ async function loadBookings() {
   <p><b>Vehicle:</b> ${data.vehicleType || "-"}</p>
   <p><b>Trip:</b> ${data.tripType || "-"}</p>
   <p><b>Status:</b> ${data.status || "-"}</p>
+<select class="booking-status">
+  <option value="Pending">Pending</option>
+  <option value="Confirmed">Confirmed</option>
+  <option value="Completed">Completed</option>
+  <option value="Cancelled">Cancelled</option>
+</select>
 `;
+     const statusSelect = card.querySelector(".booking-status");
+statusSelect.value = data.status || "Pending";
+
+statusSelect.addEventListener("change", async () => {
+  try {
+    await db.collection("bookings").doc(item.id).update({
+      status: statusSelect.value
+    });
+    alert("Booking status updated!");
+  } catch (error) {
+    alert("Update failed: " + error.message);
+    statusSelect.value = data.status || "Pending";
+  }
+});
       bookingsBox.appendChild(card);
     });
   } catch (error) {
