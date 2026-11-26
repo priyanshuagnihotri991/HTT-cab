@@ -57,177 +57,95 @@ button:disabled{opacity:.5}
 </section>
 </main>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import {
- getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-import {
-  getFirestore, collection, getDocs, query, orderBy, limit, where,
-  doc, updateDoc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-alert("Firebase module loaded");
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script>
 const firebaseConfig = {
- apiKey: "AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",
- authDomain: "htt-cab.firebaseapp.com",
- projectId: "htt-cab",
- storageBucket: "htt-cab.firebasestorage.app",
- messagingSenderId: "752311448265",
- appId: "1:752311448265:web:33738207544f66846e5318"
+  apiKey: "AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",
+  authDomain: "htt-cab.firebaseapp.com",
+  projectId: "htt-cab",
+  storageBucket: "htt-cab.firebasestorage.app",
+  messagingSenderId: "752311448265",
+  appId: "1:752311448265:web:33738207544f66846e5318"
 };
 
 const ADMIN_UID = "3PwkNOBhldYvXPLyPWXOC4F6d3j2";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 const loginPanel = document.getElementById("loginPanel");
 const dashboard = document.getElementById("dashboard");
 const message = document.getElementById("message");
 const bookingsBox = document.getElementById("bookings");
-message.textContent = "JavaScript Loaded";
+const driversBox = document.getElementById("drivers");
+
 document.getElementById("loginBtn").onclick = async () => {
- message.textContent = "Signing in...";
- try {
-  await signInWithEmailAndPassword(
-   auth,
-   document.getElementById("email").value.trim(),
-   document.getElementById("password").value
-  );
- } catch (error) {
-message.textContent = "Login failed: " + error.code + " - " + error.message;
- }
+  message.textContent = "Signing in...";
+  try {
+    await auth.signInWithEmailAndPassword(
+      document.getElementById("email").value.trim(),
+      document.getElementById("password").value
+    );
+  } catch (error) {
+    message.textContent = error.code + ": " + error.message;
+  }
 };
 
-onAuthStateChanged(auth, async user => {
- if (!user) {
-  loginPanel.classList.remove("hidden");
-  dashboard.classList.add("hidden");
-  return;
- }
+auth.onAuthStateChanged(async user => {
+  if (!user) {
+    loginPanel.classList.remove("hidden");
+    dashboard.classList.add("hidden");
+    return;
+  }
 
- if (user.uid !== ADMIN_UID) {
-  await signOut(auth);
-  message.textContent = "Access denied. Admin account only.";
-  return;
- }
+  if (user.uid !== ADMIN_UID) {
+    await auth.signOut();
+    message.textContent = "Access denied. Admin account only.";
+    return;
+  }
 
- loginPanel.classList.add("hidden");
- dashboard.classList.remove("hidden");
- loadBookings();
+  loginPanel.classList.add("hidden");
+  dashboard.classList.remove("hidden");
+  loadBookings();
+  loadDrivers();
 });
 
 async function loadBookings() {
- bookingsBox.textContent = "Loading bookings...";
- try {
-  const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"), limit(50));
-  const result = await getDocs(q);
-
-  if (result.empty) {
-   bookingsBox.textContent = "No bookings found.";
-   return;
-  }
-
-  bookingsBox.replaceChildren();
-
-  result.forEach(item => {
-   const data = item.data();
-   const card = document.createElement("div");
-   card.className = "booking";
-
-   const title = document.createElement("strong");
-   title.textContent = "Booking ID: " + item.id;
-
-   const details = document.createElement("p");
-   details.textContent =
-    "Pickup: " + (data.pickup || "—") +
-    " | Drop: " + (data.drop || "—");
-
-   const status = document.createElement("p");
-   status.className = "status";
-   status.textContent = "Status: " + (data.status || "—");
-const assignBtn = document.createElement("button");
-   assignBtn.textContent = "Assign Driver";
-   card.append(title, details, status, assignBtn);
-   assignBtn.onclick = async () => {
+  bookingsBox.textContent = "Loading bookings...";
   try {
-    assignBtn.disabled = true;
-    assignBtn.textContent = "Loading...";
+    const result = await db.collection("bookings").limit(50).get();
+    bookingsBox.replaceChildren();
 
-    const driversResult = await getDocs(
-  collection(db, "drivers")
-);
-
-    alert("No drivers available.");
+    if (result.empty) {
+      bookingsBox.textContent = "No bookings found.";
       return;
     }
 
-    const drivers = driversResult.docs;
-
-    const driverList = drivers.map((d, i) => {
-      const driver = d.data();
-      return (i + 1) + ". " +
-        (driver.fullName || "Unknown") +
-        " | " + (driver.phone || "No phone");
-    }).join("\n");
-
-    const choice = prompt(
-      "Select a Driver by entering number:\n\n" + driverList
-    );
-
-    if (choice === null) return;
-
-    const index = Number(choice) - 1;
-
-    if (!Number.isInteger(index) || index < 0 || index >= drivers.length) {
-      alert("Invalid driver selection.");
-      return;
-    }
-
-    const selectedDoc = drivers[index];
-    const selectedDriver = selectedDoc.data();
-
-    const confirmed = confirm(
-      "Assign " + selectedDriver.fullName +
-      " to this booking?"
-    );
-
-    if (!confirmed) return;
-
-    await updateDoc(doc(db, "bookings", item.id), {
-      assignedDriverId: selectedDoc.id,
-      assignedDriverName: selectedDriver.fullName,
-      assignedDriverPhone: selectedDriver.phone,
-      status: "Assigned",
-      assignedAt: serverTimestamp()
+    result.forEach(item => {
+      const data = item.data();
+      const card = document.createElement("div");
+      card.className = "booking";
+      card.textContent =
+        "Booking ID: " + item.id +
+        " | Name: " + (data.fullName || data.name || "-") +
+        " | Phone: " + (data.phone || data.mobile || "-") +
+        " | Status: " + (data.status || "-");
+      bookingsBox.appendChild(card);
     });
-
-    alert("Driver assigned successfully!");
-    await loadBookings();
-
   } catch (error) {
-    alert("Assignment failed: " + error.message);
-  } finally {
-    assignBtn.disabled = false;
-    assignBtn.textContent = "Assign Driver";
+    bookingsBox.textContent = "Booking error: " + error.message;
   }
-};
-   bookingsBox.append(card);
-  });
- } catch (error) {
-  bookingsBox.textContent = "Could not load bookings. Please check Firebase permissions.";
- }
 }
+
 async function loadDrivers() {
-  const driversBox = document.getElementById("drivers");
   driversBox.textContent = "Loading drivers...";
-
   try {
-    const result = await getDocs(
-      query(collection(db, "drivers"), limit(50))
-    );
-
+    const result = await db.collection("drivers").limit(50).get();
     driversBox.replaceChildren();
 
     if (result.empty) {
@@ -239,23 +157,19 @@ async function loadDrivers() {
       const data = item.data();
       const card = document.createElement("div");
       card.className = "booking";
-
       card.textContent =
-        "Name: " + (data.fullName || "-") +
-        " | Phone: " + (data.phone || "-") +
-        " | City: " + (data.city || "-") +
+        "Name: " + (data.fullName || data.name || "-") +
+        " | Phone: " + (data.phone || data.mobile || "-") +
         " | Status: " + (data.status || "-");
-
-      driversBox.append(card);
+      driversBox.appendChild(card);
     });
   } catch (error) {
-    driversBox.textContent =
-      "Could not load drivers. Check Firestore permissions.";
+    driversBox.textContent = "Driver error: " + error.message;
   }
 }
+
 document.getElementById("refreshBtn").onclick = loadBookings;
- document.getElementById("refreshDriversBtn").onclick = loadDrivers;
-document.getElementById("logoutBtn").onclick = () => signOut(auth);
+document.getElementById("refreshDriversBtn").onclick = loadDrivers;
+document.getElementById("logoutBtn").onclick = () => auth.signOut();
 </script>
-</body>
-</html>
+  
