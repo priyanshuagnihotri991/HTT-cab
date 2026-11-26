@@ -141,8 +141,12 @@ async function loadBookings() {
    const status = document.createElement("p");
    status.className = "status";
    status.textContent = "Status: " + (data.status || "—");
-
-   card.append(title, details, status);
+const assignBtn = document.createElement("button");
+   assignBtn.textContent = "Assign Driver";
+   card.append(title, details, status, assignBtn);
+   assignBtn.onclick = () => {
+  alert("Driver assignment will be added next.");
+};
    bookingsBox.append(card);
   });
  } catch (error) {
