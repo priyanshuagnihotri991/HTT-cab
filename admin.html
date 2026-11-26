@@ -130,12 +130,16 @@ async function loadBookings() {
       const data = item.data();
       const card = document.createElement("div");
       card.className = "booking";
-      card.textContent =
-  "Booking ID: " + item.id + "\n" +
-  Object.entries(data)
-    .map(([key, value]) => key + ": " +
-      (typeof value === "object" ? JSON.stringify(value) : value))
-    .join("\n");
+      card.innerHTML = `
+  <h3>Booking ID: ${item.id}</h3>
+  <p><b>Customer:</b> ${data.customerName || "-"}</p>
+  <p><b>Phone:</b> ${data.phone || "-"}</p>
+  <p><b>Pickup:</b> ${data.pickup || "-"}</p>
+  <p><b>Drop:</b> ${data.drop || "-"}</p>
+  <p><b>Vehicle:</b> ${data.vehicleType || "-"}</p>
+  <p><b>Trip:</b> ${data.tripType || "-"}</p>
+  <p><b>Status:</b> ${data.status || "-"}</p>
+`;
       bookingsBox.appendChild(card);
     });
   } catch (error) {
