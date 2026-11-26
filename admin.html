@@ -61,6 +61,13 @@ button:disabled{opacity:.5}
     No applications loaded yet.
   </div>
 </div>
+ <div class="panel">
+  <h2>Vehicle Management</h2>
+  <button id="refreshVehiclesBtn">Refresh Vehicles</button>
+  <div id="vehiclesBox" class="muted">
+    No vehicles loaded yet.
+  </div>
+</div>
 </section>
 </main>
 
@@ -271,5 +278,90 @@ document.getElementById("logoutBtn").onclick = () => auth.signOut();
 
 document.getElementById("refreshApplicationsBtn")
   .onclick = loadDriverApplications;
+ const vehiclesBox = document.getElementById("vehiclesBox");
+
+async function loadVehicles() {
+  vehiclesBox.textContent = "Loading vehicles...";
+
+  try {
+    const result = await db.collection("vehicles").limit(50).get();
+    vehiclesBox.replaceChildren();
+
+    if (result.empty) {
+      vehiclesBox.textContent = "No vehicles found.";
+      return;
+    }
+
+    result.forEach(item => {
+      const data = item.data();
+      const card = document.createElement("div");
+      card.className = "booking";
+
+      const title = document.createElement("h3");
+      title.textContent =
+        (data.VehicleNumber || "No Number") +
+        " | " + (data.VehicleModel || "No Model");
+      card.appendChild(title);
+
+      const details = document.createElement("p");
+      details.textContent =
+        "City: " + (data.City || "-") +
+        " | Type: " + (data.VehicleType || "-") +
+        " | Seats: " + (data.Seatingcapacity || "-");
+      card.appendChild(details);
+
+      const approval = document.createElement("select");
+      ["Pending", "Approved", "Rejected", "Suspended"].forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        approval.appendChild(option);
+      });
+      approval.value = data.approvalStatus || "Pending";
+      card.appendChild(approval);
+
+      const availability = document.createElement("select");
+      ["Available", "Unavailable"].forEach(value => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = value;
+        availability.appendChild(option);
+      });
+      availability.value = data.availability || "Unavailable";
+      card.appendChild(availability);
+
+      const driverInput = document.createElement("input");
+      driverInput.placeholder = "Driver ID (leave blank to unassign)";
+      driverInput.value = data.driverId || "";
+      card.appendChild(driverInput);
+
+      const saveButton = document.createElement("button");
+      saveButton.textContent = "Save Vehicle";
+      card.appendChild(saveButton);
+
+      saveButton.onclick = async () => {
+        saveButton.disabled = true;
+        try {
+          await db.collection("vehicles").doc(item.id).update({
+            approvalStatus: approval.value,
+            availability: availability.value,
+            driverId: driverInput.value.trim()
+          });
+          alert("Vehicle updated successfully!");
+        } catch (error) {
+          alert("Update failed: " + error.message);
+        } finally {
+          saveButton.disabled = false;
+        }
+      };
+
+      vehiclesBox.appendChild(card);
+    });
+  } catch (error) {
+    vehiclesBox.textContent = "Vehicle error: " + error.message;
+  }
+}
+
+document.getElementById("refreshVehiclesBtn").onclick = loadVehicles;
 </script>
   
