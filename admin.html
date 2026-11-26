@@ -49,6 +49,11 @@ button:disabled{opacity:.5}
 <button id="refreshBtn">Refresh Bookings</button>
 <div id="bookings" class="muted">No bookings loaded yet.</div>
 </div>
+ <div class="panel">
+  <h2>Drivers</h2>
+  <button id="refreshDriversBtn">Refresh Drivers</button>
+  <div id="drivers" class="muted">No drivers loaded yet.</div>
+ </div>
 </section>
 </main>
 
@@ -58,7 +63,7 @@ import {
  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import {
- getFirestore, collection, getDocs, query, orderBy, limit
+ getFirestore, collection, getDocs, query, orderBy, limit, where
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -153,8 +158,42 @@ const assignBtn = document.createElement("button");
   bookingsBox.textContent = "Could not load bookings. Please check Firebase permissions.";
  }
 }
+async function loadDrivers() {
+  const driversBox = document.getElementById("drivers");
+  driversBox.textContent = "Loading drivers...";
 
+  try {
+    const result = await getDocs(
+      query(collection(db, "drivers"), limit(50))
+    );
+
+    driversBox.replaceChildren();
+
+    if (result.empty) {
+      driversBox.textContent = "No drivers found.";
+      return;
+    }
+
+    result.forEach(item => {
+      const data = item.data();
+      const card = document.createElement("div");
+      card.className = "booking";
+
+      card.textContent =
+        "Name: " + (data.fullName || "-") +
+        " | Phone: " + (data.phone || "-") +
+        " | City: " + (data.city || "-") +
+        " | Status: " + (data.status || "-");
+
+      driversBox.append(card);
+    });
+  } catch (error) {
+    driversBox.textContent =
+      "Could not load drivers. Check Firestore permissions.";
+  }
+}
 document.getElementById("refreshBtn").onclick = loadBookings;
+ document.getElementById("refreshDriversBtn").onclick = loadDrivers;
 document.getElementById("logoutBtn").onclick = () => signOut(auth);
 </script>
 </body>
