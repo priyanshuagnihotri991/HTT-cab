@@ -63,7 +63,8 @@ import {
  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import {
- getFirestore, collection, getDocs, query, orderBy, limit, where
+  getFirestore, collection, getDocs, query, orderBy, limit, where,
+  doc, updateDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
