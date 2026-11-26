@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTT CAB | Admin Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1424;color:#fff;font-family:Arial,sans-serif}
+header{padding:20px;background:#101e35;border-bottom:1px solid #b99a50}
+h1{margin:0;color:#d8b65e;font-size:24px}
+header p{margin:6px 0 0;color:#cbd3df}
+main{max-width:950px;margin:30px auto;padding:16px}
+.panel{background:#14243d;border:1px solid #34435b;border-radius:14px;padding:22px;margin-bottom:18px}
+h2{color:#e1bd65;margin-top:0}
+input{width:100%;padding:14px;margin:8px 0 14px;border-radius:8px;border:1px solid #65738a;background:#0b1424;color:white;font-size:16px}
+button{padding:13px 20px;border:0;border-radius:8px;background:#d8b65e;color:#101827;font-weight:bold;font-size:15px}
+button:disabled{opacity:.5}
+.hidden{display:none}
+.muted{color:#b8c2d1}
+.booking{padding:14px 0;border-bottom:1px solid #34435b}
+.status{color:#e1bd65}
+</style>
+</head>
+<body>
+<header>
+<h1>HTT CAB</h1>
+<p>Admin Dashboard — Your Journey, Our Responsibility.</p>
+</header>
+
+<main>
+<section class="panel" id="loginPanel">
+<h2>Admin Login</h2>
+<p class="muted">Sign in with your authorized admin account.</p>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button id="loginBtn">Login</button>
+<p id="message" class="muted"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="panel">
+<h2>Welcome, Admin</h2>
+<p class="muted">HTT CAB Management Panel</p>
+<button id="logoutBtn">Logout</button>
+</div>
+<div class="panel">
+<h2>Bookings</h2>
+<button id="refreshBtn">Refresh Bookings</button>
+<div id="bookings" class="muted">No bookings loaded yet.</div>
+</div>
+</section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+ getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+ getFirestore, collection, getDocs, query, orderBy, limit
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyAD3dsycJ7PzTkzC26T6A8dgNN0hZKw-Yc",
+ authDomain: "htt-cab.firebaseapp.com",
+ projectId: "htt-cab",
+ storageBucket: "htt-cab.firebasestorage.app",
+ messagingSenderId: "752311448265",
+ appId: "1:752311448265:web:33738207544f66846e5318"
+};
+
+const ADMIN_UID = "M7XdLUWMIHgeB7VVv07HvugAADA2";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const loginPanel = document.getElementById("loginPanel");
+const dashboard = document.getElementById("dashboard");
+const message = document.getElementById("message");
+const bookingsBox = document.getElementById("bookings");
+
+document.getElementById("loginBtn").onclick = async () => {
+ message.textContent = "Signing in...";
+ try {
+  await signInWithEmailAndPassword(
+   auth,
+   document.getElementById("email").value.trim(),
+   document.getElementById("password").value
+  );
+ } catch (error) {
+  message.textContent = "Login failed. Check your email and password.";
+ }
+};
+
+onAuthStateChanged(auth, async user => {
+ if (!user) {
+  loginPanel.classList.remove("hidden");
+  dashboard.classList.add("hidden");
+  return;
+ }
+
+ if (user.uid !== ADMIN_UID) {
+  await signOut(auth);
+  message.textContent = "Access denied. Admin account only.";
+  return;
+ }
+
+ loginPanel.classList.add("hidden");
+ dashboard.classList.remove("hidden");
+ loadBookings();
+});
+
+async function loadBookings() {
+ bookingsBox.textContent = "Loading bookings...";
+ try {
+  const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"), limit(50));
+  const result = await getDocs(q);
+
+  if (result.empty) {
+   bookingsBox.textContent = "No bookings found.";
+   return;
+  }
+
+  bookingsBox.replaceChildren();
+
+  result.forEach(item => {
+   const data = item.data();
+   const card = document.createElement("div");
+   card.className = "booking";
+
+   const title = document.createElement("strong");
+   title.textContent = "Booking ID: " + item.id;
+
+   const details = document.createElement("p");
+   details.textContent =
+    "Pickup: " + (data.pickup || "—") +
+    " | Drop: " + (data.drop || "—");
+
+   const status = document.createElement("p");
+   status.className = "status";
+   status.textContent = "Status: " + (data.status || "—");
+
+   card.append(title, details, status);
+   bookingsBox.append(card);
+  });
+ } catch (error) {
+  bookingsBox.textContent = "Could not load bookings. Please check Firebase permissions.";
+ }
+}
+
+document.getElementById("refreshBtn").onclick = loadBookings;
+document.getElementById("logoutBtn").onclick = () => signOut(auth);
+</script>
+</body>
+</html>
